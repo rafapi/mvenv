@@ -6,3 +6,5 @@ A Python 3 Virtual Environment Management Tool
 * Open a new shell
 ### usage
 * type `mve` on your shell to see the options.
+### requirements
+* Either `asdf` or `pyenv` has been made a hard requirement to encourage good habits.
