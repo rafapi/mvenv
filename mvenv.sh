@@ -20,9 +20,9 @@ function _mvenvcomplete() {
   local curr="${COMP_WORDS[COMP_CWORD]}"
 
   if [ "$COMP_CWORD" -eq 1 ]; then
-    local services=("rm" "mk" "ls" "help")
+    local services=("rm" "mk" "ls" "help" "activate")
     COMPREPLY=($(compgen -W "${services[*]}" -- "$curr"))
-  elif [ "${COMP_WORDS[1]}" = "rm" ]; then
+  elif [ "${COMP_WORDS[1]}" = "rm" ] || [ "${COMP_WORDS[1]}" = "activate" ]; then
     COMPREPLY+=( "$(_ls_venvs -- "${curr}")" )
   else
     COMPREPLY=""
@@ -31,7 +31,7 @@ function _mvenvcomplete() {
 
 function _mvenv_usage() {
   echo
-  echo "cli options:"
+  echo "CLI Options:"
   echo "    mve mk <word>     -->   creates a new venv"
   echo "    mve rm <word>     -->   removes an existing venv"
   echo "    mve ls <word>     -->   lists all available venvs"
@@ -114,7 +114,8 @@ function _ls_venvs() {
 
 function mve() {
   # main function
-  declare env_name="${1}"
+  declare action=$1
+  declare env_name=$2
   if [ "${env_name}" = "" ]; then
     _mvenv_usage
     return 1
@@ -122,15 +123,15 @@ function mve() {
     IFS='%'
     env_name="$(basename "$(pwd)")"
     unset IFS
-  elif [ "$1" = "ls" ]; then
+  elif [ "$action" = "ls" ]; then
     _ls_venvs
-  elif [ "$1" = "mk" ]; then
-    _mk_mvenv "$2"
-  elif [ "$1" = "rm" ]; then
-    _rm_mvenv "$2"
-  elif [ "$1" = "help" ]; then
+  elif [ "$action" = "mk" ]; then
+    _mk_mvenv "$env_name"
+  elif [ "$action" = "rm" ]; then
+    _rm_mvenv "$env_name"
+  elif [ "$action" = "help" ]; then
     _mvenv_usage
-  else
+  elif [ "$action" = "activate" ]; then
     _verify_venv "${env_name}" || return 1
     declare env_dir="$WORKON_HOME/$env_name"
 
