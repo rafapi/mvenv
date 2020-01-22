@@ -114,29 +114,27 @@ function _ls_venvs() {
 
 function mve() {
   # main function
-  declare action=$1
-  declare env_name=$2
-  if [ "${env_name}" = "" ]; then
+  if [ "${1}" = "" ]; then
     _mvenv_usage
     return 1
-  elif [ "${env_name}" = "." ]; then
+  elif [ "${1}" = "." ]; then
     IFS='%'
     env_name="$(basename "$(pwd)")"
     unset IFS
-  elif [ "$action" = "ls" ]; then
+  elif [ "$1" = "ls" ]; then
     _ls_venvs
-  elif [ "$action" = "mk" ]; then
-    _mk_mvenv "$env_name"
-  elif [ "$action" = "rm" ]; then
-    _rm_mvenv "$env_name"
-  elif [ "$action" = "help" ]; then
+  elif [ "$1" = "mk" ]; then
+    _mk_mvenv "$2"
+  elif [ "$1" = "rm" ]; then
+    _rm_mvenv "$2"
+  elif [ "$1" = "help" ]; then
     _mvenv_usage
-  elif [ "$action" = "activate" ]; then
-    _verify_venv "${env_name}" || return 1
-    declare env_dir="$WORKON_HOME/$env_name"
+  elif [ "$1" = "activate" ]; then
+    _verify_venv "${2}" || return 1
+    declare env_dir="$WORKON_HOME/$2"
 
     if ! _verify_activate "$env_dir"; then
-      echo "ERROR: The venv $env_name does not contain an activate script." >&2
+      echo "ERROR: The venv $2 does not contain an activate script." >&2
       return 1
     fi
 
