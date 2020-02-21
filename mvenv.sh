@@ -15,49 +15,7 @@ else
 fi
 
 
-function _mvenvcomplete() {
-  COMPREPLY=()
-  local curr="${COMP_WORDS[COMP_CWORD]}"
-
-  if [ "$COMP_CWORD" -eq 1 ]; then
-    local services=("rm" "mk" "ls" "help" "activate")
-    COMPREPLY=($(compgen -W "${services[*]}" -- "$curr"))
-  elif [ "${COMP_WORDS[1]}" = "rm" ] || [ "${COMP_WORDS[1]}" = "activate" ]; then
-    COMPREPLY+=( "$(_ls_venvs -- "${curr}")" )
-  else
-    COMPREPLY=""
-  fi
-}
-
-function _mvenv_usage() {
-  echo
-  echo "CLI Options:"
-  echo "    mve mk <word>     -->   creates a new venv"
-  echo "    mve rm <word>     -->   removes an existing venv"
-  echo "    mve ls <word>     -->   lists all available venvs"
-  echo "    mve help <word>   -->   displays this menu"
-  echo
-}
-
-function _verify_home_dir() {
-  RC=0
-  if [ ! -d "${WORKON_HOME}" ]; then
-    mkdir -p "${WORKON_HOME}"
-    RC=$?
-  fi
-  return $RC
-}
-
-function _verify_venv() {
-  declare env_name="${1}"
-  if [ ! -d "${WORKON_HOME}/${env_name}" ]; then
-    echo "ERROR: Environment '${env_name}' does not exist. Create it with 'mve mk ${env_name}'." >&2
-    return 1
-  fi
-  return 0
-}
-
-function _verify_activate() {
+_verify_activate () {
   declare env_dir="$1"
   activate="${env_dir}""/bin/activate"
   if [ -f "${activate}" ]; then
@@ -67,7 +25,62 @@ function _verify_activate() {
   fi
 }
 
-function _mk_mvenv() {
+_activate_venv () {
+  _verify_venv "${1}" || return 1
+  declare env_dir="$WORKON_HOME/$1"
+
+  if ! _verify_activate "$env_dir"; then
+    echo "ERROR: The venv $1 does not contain an activate script." >&2
+    return 1
+  fi
+
+  # shellcheck disable=1090
+  source "$activate"
+}
+
+_mvenvcomplete () {
+  COMPREPLY=()
+  local curr="${COMP_WORDS[COMP_CWORD]}"
+
+  if [ "$COMP_CWORD" -eq 1 ]; then
+    local services=("rm" "mk" "ls" "help" "activate")
+    COMPREPLY=($(compgen -W "${services[*]}" -- "$curr"))
+  elif [ "${COMP_WORDS[1]}" = "rm" ] || [ "${COMP_WORDS[1]}" = "activate" ]; then
+    COMPREPLY+=( "$(_ls_venvs -- "${curr}")" )
+  else
+    COMPREPLY=()
+  fi
+}
+
+_mvenv_usage () {
+  echo
+  echo "CLI Options:"
+  echo "    mve mk <word>     -->   creates a new venv"
+  echo "    mve rm <word>     -->   removes an existing venv"
+  echo "    mve ls <word>     -->   lists all available venvs"
+  echo "    mve help <word>   -->   displays this menu"
+  echo
+}
+
+_verify_home_dir () {
+  RC=0
+  if [ ! -d "${WORKON_HOME}" ]; then
+    mkdir -p "${WORKON_HOME}"
+    RC=$?
+  fi
+  return $RC
+}
+
+_verify_venv () {
+  declare env_name="${1}"
+  if [ ! -d "${WORKON_HOME}/${env_name}" ]; then
+    echo "ERROR: Environment '${env_name}' does not exist. Create it with 'mve mk ${env_name}'." >&2
+    return 1
+  fi
+  return 0
+}
+
+_mk_mvenv () {
   # Make a new virtual env
   _verify_home_dir || return 1
   declare env_name="${1}"
@@ -78,10 +91,10 @@ function _mk_mvenv() {
     "${MVENV_PY_PATH}" -m venv "${WORKON_HOME}"/"${env_name}"
   fi
 
-  mve "$env_name"
+  _activate_venv "${env_name}"
 }
 
-function _rm_mvenv() {
+_rm_mvenv () {
   # Delete a virtual env
   _verify_home_dir || return 1
   declare env_name="${1}"
@@ -104,7 +117,7 @@ function _rm_mvenv() {
   command rm -rf "$env_dir"
 }
 
-function _ls_venvs() {
+_ls_venvs () {
   for i in "${WORKON_HOME}"/*; do
     if _verify_activate "$i"; then
       basename "$i"
@@ -112,7 +125,7 @@ function _ls_venvs() {
   done
 }
 
-function mve() {
+mve () {
   # main function
   if [ "${1}" = "" ]; then
     _mvenv_usage
@@ -130,16 +143,7 @@ function mve() {
   elif [ "$1" = "help" ]; then
     _mvenv_usage
   elif [ "$1" = "activate" ]; then
-    _verify_venv "${2}" || return 1
-    declare env_dir="$WORKON_HOME/$2"
-
-    if ! _verify_activate "$env_dir"; then
-      echo "ERROR: The venv $2 does not contain an activate script." >&2
-      return 1
-    fi
-
-    # shellcheck disable=1090
-    source "$activate"
+    _activate_venv "$2"
   fi
 
   return 0
