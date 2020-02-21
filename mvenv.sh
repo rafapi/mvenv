@@ -55,10 +55,12 @@ _mvenvcomplete () {
 _mvenv_usage () {
   echo
   echo "CLI Options:"
-  echo "    mve mk <word>     -->   creates a new venv"
-  echo "    mve rm <word>     -->   removes an existing venv"
-  echo "    mve ls <word>     -->   lists all available venvs"
-  echo "    mve help <word>   -->   displays this menu"
+  echo "    mve mk <word>         -->   creates a new venv"
+  echo "    mve rm <word>         -->   removes an existing venv"
+  echo "    mve ls <word>         -->   lists all available venvs"
+  echo "    mve activate <word>   -->   activate a venv"
+  echo ""
+  echo "    mve help <word>       -->   displays this menu"
   echo
 }
 
