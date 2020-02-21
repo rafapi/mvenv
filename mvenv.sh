@@ -40,13 +40,13 @@ _activate_venv () {
 
 _mvenvcomplete () {
   COMPREPLY=()
-  local curr="${COMP_WORDS[COMP_CWORD]}"
+  local cur="${COMP_WORDS[COMP_CWORD]}"
 
   if [ "$COMP_CWORD" -eq 1 ]; then
     local services=("rm" "mk" "ls" "help" "activate")
-    COMPREPLY=($(compgen -W "${services[*]}" -- "$curr"))
+    COMPREPLY=($(compgen -W "${services[*]}" -- "$cur"))
   elif [ "${COMP_WORDS[1]}" = "rm" ] || [ "${COMP_WORDS[1]}" = "activate" ]; then
-    COMPREPLY+=( "$(_ls_venvs -- "${curr}")" )
+    COMPREPLY+=($(compgen -W "$(_ls_venvs)" -- "$cur"))
   else
     COMPREPLY=()
   fi
