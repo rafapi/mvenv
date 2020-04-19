@@ -5,15 +5,14 @@
 # Python 2 is out of scope
 
 WORKON_HOME=$HOME/.virtualenvs
-if type asdf > /dev/null 2>&1; then
-  MVENV_PY_PATH=$(asdf which python)
-elif type pyenv > /dev/null 2>&1; then
-  MVENV_PY_PATH=$(pyenv which python)
+if type asdf >/dev/null 2>&1; then
+  PY_INSTALL=asdf
+elif type pyenv >/dev/null 2>&1; then
+  PY_INSTALL=pyenv
 else
   echo "ERROR: No python version management tool found." >&2
   exit 1
 fi
-
 
 _verify_activate () {
   declare env_dir="$1"
@@ -83,6 +82,8 @@ _verify_venv () {
 }
 
 _mk_mvenv () {
+  # Use python version specified by running location
+  MVENV_PY_PATH=$(cd "$PWD" || exit; "${PY_INSTALL}" which python)
   # Make a new virtual env
   _verify_home_dir || return 1
   declare env_name="${1}"
@@ -90,10 +91,12 @@ _mk_mvenv () {
     echo "Missing venv name"
   else
     echo "Creating a new venv with name: ${env_name}"
+    echo "$(python -V)"
     "${MVENV_PY_PATH}" -m venv "${WORKON_HOME}"/"${env_name}"
   fi
 
   _activate_venv "${env_name}"
+  pip install --upgrade pip
 }
 
 _rm_mvenv () {
