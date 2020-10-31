@@ -6,7 +6,7 @@ A Python 3 Virtual Environment Management Tool
     ```
     source $HOME/.mvenv/mvenv.sh
     ```
-* Open a new shell
+* Open a new shell or run `source $HOME/.mvenv/mvenv.sh` in the current one
 ### usage
 * type `mve` on your shell to see the options.
 ### requirements
