@@ -59,7 +59,7 @@ _mvenv_usage () {
   echo "    mve ls <word>         -->   lists all available venvs"
   echo "    mve activate <word>   -->   activate a venv"
   echo ""
-  echo "    mve help <word>       -->   displays this menu"
+  echo "    mve help              -->   displays this menu"
   echo
 }
 
