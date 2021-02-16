@@ -10,7 +10,7 @@ A Python 3 Virtual Environment Management Tool
 ### usage
 * type `mve` on your shell to see the options.
 ```
-mve help
+# mve help
 
 CLI Options:
     mve mk <word>         -->   creates a new venv
