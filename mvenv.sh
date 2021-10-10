@@ -25,6 +25,7 @@ _verify_activate () {
 }
 
 _activate_venv () {
+  # Activate a virtual env
   _verify_venv "${1}" || return 1
   declare env_dir="$WORKON_HOME/$1"
 
