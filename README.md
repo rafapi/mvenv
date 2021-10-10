@@ -1,4 +1,10 @@
 # mvenv
+
+<p align="left">
+     <img src="https://img.shields.io/github/license/rafapi/mvenv">
+     <img src="https://img.shields.io/github/last-commit/rafapi/mvenv">
+</p>
+
 A Python 3 Virtual Environment Management Tool
 ### set-up
 * Clone this repo: `git clone https://github.com/rafapi/mvenv.git ~/.mvenv`
