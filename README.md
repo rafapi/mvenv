@@ -27,4 +27,5 @@ CLI Options:
     mve help              -->   displays this menu
 ```
 ### requirements
-* Either `asdf` or `pyenv` has been made a hard requirement to encourage good habits.
+* Either `asdf` or `pyenv`
+* Python > 3.4
