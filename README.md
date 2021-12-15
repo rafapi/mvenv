@@ -5,7 +5,7 @@
      <img src="https://img.shields.io/github/last-commit/rafapi/mvenv">
 </p>
 
-A Python 3 Virtual Environment Management Tool
+A minimalist Python venv management tool
 ### set-up
 * Clone this repo: `git clone https://github.com/rafapi/mvenv.git ~/.mvenv`
 * Source `mvenv` from `~/.bashrc` or `~/.zshrc`
