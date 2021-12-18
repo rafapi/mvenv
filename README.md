@@ -28,4 +28,4 @@ CLI Options:
 ```
 ### requirements
 * Either `asdf` or `pyenv`
-* `Python > 3.4`
+* `Python >= 3.7`
