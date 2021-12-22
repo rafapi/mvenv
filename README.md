@@ -3,6 +3,7 @@
 <p align="left">
      <img src="https://img.shields.io/github/license/rafapi/mvenv">
      <img src="https://img.shields.io/github/last-commit/rafapi/mvenv">
+     <img src="https://img.shields.io/badge/python-%3E%3D3.7-brightgreen" alt="Python 3.7 3.8 3.9" title="mvenv supports Python 3.7 and above"></a>
 </p>
 
 A minimalist Python venv management tool
